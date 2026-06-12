@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You — Always</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #09091a;
+      --surface:      #12122b;
+      --card:         #16163a;
+      --violet:       #b06bff;
+      --violet-dim:   #7c3aed44;
+      --rose:         #f9a8d4;
+      --rose-dim:     #f9a8d420;
+      --cream:        #fdf4ff;
+      --muted:        #a89fc2;
+      --border:       #ffffff0f;
+      --glow-v:       #b06bff33;
+      --glow-r:       #f9a8d428;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── CANVAS ─── */
+    #stardust {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.6rem, 12vw, 8.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 1.1s 0.55s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--violet) 0%, var(--rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      margin-top: 1.4rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+      color: var(--muted);
+      max-width: 560px;
+      opacity: 0;
+      animation: fadeUp 1.1s 0.8s forwards;
+    }
+
+    .hero-scroll-hint {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 1.4s forwards;
+    }
+    .hero-scroll-hint span {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 52px;
+      background: linear-gradient(to bottom, var(--violet), transparent);
+      animation: lineGrow 2.2s 1.8s ease-in-out infinite;
+    }
+
+    /* ─── HERO PHOTO ─── */
+    .hero-photo {
+      margin-top: 3rem;
+      width: clamp(200px, 60vw, 340px);
+      aspect-ratio: 3/4;
+      border-radius: 180px 180px 120px 120px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 60px var(--glow-v), 0 0 120px var(--glow-r);
+      opacity: 0;
+      animation: fadeUp 1.2s 1s forwards;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-photo .photo-placeholder {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* ══════════════════════════════
+       LETTER SECTION
+    ══════════════════════════════ */
+    #letter {
+      padding: 5rem 1.5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 2.5rem;
+    }
+
+    .letter-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 680px;
+      width: 100%;
+      padding: 2.8rem 2.6rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.4s ease;
+    }
+
+    .letter-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-card:hover {
+      box-shadow: 0 0 40px var(--glow-v);
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--rose));
+      border-radius: 20px 20px 0 0;
+    }
+
+    .card-icon {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .card-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+
+    .card-headline em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .card-body {
+      font-size: clamp(0.9rem, 2.5vw, 1.02rem);
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .card-body strong {
+      color: var(--cream);
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════
+       INTERACTIVE REMINDERS
+    ══════════════════════════════ */
+    #reminders {
+      padding: 4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .reminders-intro {
+      text-align: center;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    .reminders-intro h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+
+    .reminders-intro p {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .reminder-tabs {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+      max-width: 680px;
+      width: 100%;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active {
+      background: var(--violet-dim);
+      border-color: var(--violet);
+      color: var(--cream);
+    }
+
+    .reminder-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 680px;
+      width: 100%;
+      padding: 2.8rem;
+      min-height: 230px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .reminder-panel:hover {
+      box-shadow: 0 0 50px var(--glow-r);
+    }
+
+    .reminder-content {
+      display: none;
+      animation: fadeIn 0.45s ease forwards;
+    }
+
+    .reminder-content.active {
+      display: block;
+    }
+
+    .reminder-content blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 4vw, 1.85rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.4;
+      border-left: 2px solid var(--rose);
+      padding-left: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .reminder-content p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .reminder-content p strong {
+      color: var(--cream);
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════
+       HYPE SECTION
+    ══════════════════════════════ */
+    #hype {
+      padding: 5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hype-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--violet-dim), var(--rose-dim));
+      border: 1px solid var(--violet);
+      border-radius: 999px;
+      padding: 0.45rem 1.2rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 2rem;
+    }
+
+    .hype-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 8vw, 4.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      max-width: 700px;
+      margin-bottom: 1.5rem;
+      color: var(--cream);
+    }
+
+    .hype-headline em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--violet) 0%, var(--rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hype-body {
+      max-width: 540px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+
+    .hype-body strong { color: var(--cream); font-weight: 400; }
+
+    .hype-photo {
+      width: clamp(240px, 70vw, 420px);
+      aspect-ratio: 4/3;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 70px var(--glow-v);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .hype-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hype-photo .photo-placeholder {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ══════════════════════════════
+       ANTI-VANILLA
+    ══════════════════════════════ */
+    #antvanilla {
+      padding: 5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .av-container {
+      max-width: 680px;
+      width: 100%;
+    }
+
+    .av-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .av-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .av-header p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .av-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .av-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .av-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--violet-dim), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .av-item:hover::after,
+    .av-item.lit::after { opacity: 1; }
+
+    .av-item.lit {
+      border-color: var(--violet);
+      box-shadow: 0 0 24px var(--glow-v);
+    }
+
+    .av-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .av-text { position: relative; z-index: 1; }
+
+    .av-text strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+
+    .av-text span {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .av-check {
+      margin-left: auto;
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: transparent;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .av-item.lit .av-check {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: white;
+    }
+
+    /* ══════════════════════════════
+       HUG SECTION
+    ══════════════════════════════ */
+    #hug-section {
+      padding: 5rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hug-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.7rem;
+    }
+
+    .hug-sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hug-btn {
+      background: linear-gradient(135deg, var(--violet) 0%, #e879a8 100%);
+      border: none;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 1rem 2.8rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 40px var(--glow-v);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hug-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 65px var(--violet);
+    }
+
+    .hug-btn:active { transform: scale(0.97); }
+
+    .hug-message {
+      margin-top: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      color: var(--rose);
+      max-width: 500px;
+      min-height: 3rem;
+      transition: opacity 0.4s ease;
+    }
+
+    /* ─── FLOATING HEARTS ─── */
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 1.4rem;
+      animation: floatUp 2.2s ease forwards;
+      user-select: none;
+    }
+
+    /* ─── PHOTO COLLAGE ─── */
+    #memories {
+      padding: 3rem 1.5rem 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .memories-label {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .memories-label h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 300;
+      color: var(--cream);
+    }
+
+    .memories-label p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 0.3rem;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .photo-cell {
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .photo-cell:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 28px var(--glow-v);
+      z-index: 2;
+    }
+
+    .photo-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-cell .photo-placeholder {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.6rem;
+    }
+
+    .photo-cell.tall { grid-row: span 2; aspect-ratio: unset; }
+
+    /* ══════════════════════════════
+       FINAL NOTE
+    ══════════════════════════════ */
+    #finale {
+      padding: 5rem 1.5rem 8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .finale-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1.5rem;
+    }
+
+    .finale-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 9vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--cream);
+      max-width: 700px;
+    }
+
+    .finale-headline em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--violet) 0%, var(--rose) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .finale-sig {
+      margin-top: 3rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--muted);
+    }
+
+    .finale-sig strong {
+      color: var(--rose);
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes lineGrow {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-180px) scale(1.4) rotate(20deg); opacity: 0; }
+    }
+
+    @keyframes hugPulse {
+      0%, 100% { box-shadow: 0 0 40px var(--glow-v); }
+      50%       { box-shadow: 0 0 90px var(--violet), 0 0 140px var(--glow-r); }
+    }
+
+    .pulsing { animation: hugPulse 1.6s ease-in-out infinite; }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+      margin: 0 auto;
+    }
+
+    /* ─── SCROLL PROGRESS BAR ─── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--rose));
+      z-index: 999;
+      transition: width 0.1s linear;
+      width: 0%;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 560px) {
+      .letter-card { padding: 2rem 1.5rem; }
+      .reminder-panel { padding: 2rem 1.4rem; }
+      .av-item { padding: 1.1rem 1.2rem; gap: 0.9rem; }
+      .stats-row { gap: 1.6rem; }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-cell.tall { grid-row: span 1; aspect-ratio: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Ambient canvas -->
+<canvas id="stardust"></canvas>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section id="hero">
+  <p class="hero-eyebrow">A letter for someone extraordinary</p>
+
+  <h1 class="hero-name">
+     <em>[Aashu]</em>
+  </h1>
+
+  <p class="hero-subtitle">
+    I made this for you. Because you deserve to feel, right now, how loved you truly are.
+  </p>
+
+  <!-- ★ SWAP: replace the src with your favourite photo of her -->
+  <div class="hero-photo">
+    <span class="photo-placeholder">
+      ✦ Your favourite photo of her goes here ✦<br/>
+      <small>Recommended: portrait-style, min 600×800px</small>
+    </span>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>keep scrolling</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     LETTER CARDS
+════════════════════════════════════ -->
+<section id="letter">
+  <p class="section-label">From me, to you</p>
+
+  <!-- CARD 1 — Not boring -->
+  <div class="letter-card">
+    <span class="card-icon">🌙</span>
+    <h2 class="card-headline">You are never, <em>ever</em> boring to me.</h2>
+    <p class="card-body">
+      I know you have been thinking that lately — that being stretched thin, exhausted, and heads-down means you have somehow turned into someone less interesting. I need you to hear this clearly: <strong>you are the most fascinating person in my world.</strong>
+      <br/><br/>
+      The way you push through things that would undo most people? The fire in you when you are locked in on something? Your laugh, your random thoughts at midnight, the completely specific way you exist? That is not boring. That has never been boring. That is just you, and I am obsessed with every single version of you — busy or free, quiet or loud, stressed or at peace.
+      <br/><br/>
+      Boring is a word that was not made with you in mind.
+    </p>
+  </div>
+
+  <!-- CARD 2 — Why I do what I do -->
+  <div class="letter-card">
+    <span class="card-icon">💜</span>
+    <h2 class="card-headline">I'm not just a <em>"good person."</em></h2>
+    <p class="card-body">
+      You keep saying it — "you're such a good person" — like I deserve some kind of medal. I want to set the record straight: <strong>I am not doing any of this out of some general goodness.</strong> I do everything I do because of you, specifically. Because caring about you is not a virtue — it is just the most natural thing in the world to me.
+      <br/><br/>
+      When I show up for you, it is not from some checklist of being a decent human being. It is because <strong>you matter to me more than I know how to say out loud</strong>, and loving you properly is the one thing I actually never have to try at. It just happens, every single day, without effort.
+      <br/><br/>
+      So please — next time you think I'm being "a good person," know that you are the reason.
+    </p>
+  </div>
+
+  <!-- CARD 3 — The texts thing -->
+  <div class="letter-card">
+    <span class="card-icon">📱</span>
+    <h2 class="card-headline">About the texts — <em>I promise I'm not upset.</em></h2>
+    <p class="card-body">
+      Okay, I am going to be honest with you because that is what we do. Yes — sometimes I feel a flicker of impatience when a reply takes a while. I am not going to pretend that never happens, because you deserve honesty, not a perfect performance of calmness.
+      <br/><br/>
+      But here is the whole truth: <strong>I understand.</strong> I truly do. I know what your days look like right now. I know you are not on your phone choosing to ignore me — you are in the middle of something real, something hard, something that takes everything you have got. And I would never want you to tear yourself away from that just to manage my feelings.
+      <br/><br/>
+      <strong>We cannot change the circumstances right now, and I am not asking you to.</strong> A delayed text does not even register against everything you mean to me. I am not upset. I am just someone who really, really likes hearing from you — and that is a good problem to have.
+    </p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     INTERACTIVE REMINDERS
+════════════════════════════════════ -->
+<section id="reminders">
+  <div class="reminders-intro">
+    <p class="section-label">Emergency Reassurance Kit</p>
+    <h2>For whenever you need it.</h2>
+    <p>Pick a thought. Read it slowly. Keep it.</p>
+  </div>
+
+  <div class="reminder-tabs">
+    <button class="tab-btn active" data-tab="0">I am with you</button>
+    <button class="tab-btn" data-tab="1">You are enough</button>
+    <button class="tab-btn" data-tab="2">We are okay</button>
+    <button class="tab-btn" data-tab="3">On the hard days</button>
+  </div>
+
+  <div class="reminder-panel">
+
+    <div class="reminder-content active" id="tab-0">
+      <blockquote>"I am with you through every single phase of your life — not just the easy, available, free version of you."</blockquote>
+      <p>
+        Busy seasons end. Competitions finish. Stress fades. But I am here the whole time, in the background, a constant. You do not have to earn my presence by being available or fun or responsive. <strong>I am just here. Always.</strong> No asterisk, no conditions.
+      </p>
+    </div>
+
+    <div class="reminder-content" id="tab-1">
+      <blockquote>"You are not failing me. You are fighting — and that is one of the most beautiful things I have ever watched."</blockquote>
+      <p>
+        When you worry that you are not giving enough, I want you to know: what you give me, even across the distance of a hectic week, is more than most people will ever feel. <strong>You are more than enough.</strong> You have always been more than enough. That has never been in question on my end.
+      </p>
+    </div>
+
+    <div class="reminder-content" id="tab-2">
+      <blockquote>"We are not basic. We are not fading. We are just in a busy chapter — and the story is still ours."</blockquote>
+      <p>
+        Routines are not death sentences. Quiet weeks are not warning signs. We are not slipping away from anything — we are just two people in the same story, temporarily running parallel tracks. <strong>We are so, so okay.</strong> And when the dust settles, we will be exactly where we always were: right here, together.
+      </p>
+    </div>
+
+    <div class="reminder-content" id="tab-3">
+      <blockquote>"On the days you feel invisible, uninteresting, or too stretched — I see you. I see all of it. And I am in awe."</blockquote>
+      <p>
+        The hard days are not the days you become less lovable. They are the days your strength becomes most visible. <strong>I see how hard you are working.</strong> I see what it costs you. And I am not standing on the sidelines wishing you were different — I am standing there thinking, quietly and with great certainty, that you are extraordinary.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     HYPE SECTION
+════════════════════════════════════ -->
+<section id="hype">
+  <div class="hype-badge">🏆 Official Hype Section</div>
+
+  <h2 class="hype-headline">
+    You are going to be<br/><em>absolutely incredible</em>.
+  </h2>
+
+  <p class="hype-body">
+    I have watched you prepare. I have seen the hours you have put in. I know the version of you that shows up when it matters — and let me tell you, <strong>that version is something else.</strong>
+    <br/><br/>
+    You are the most hardworking girl I have ever seen in my life. Not in a "she tries hard" way — in a genuine, jaw-dropping, makes-me-want-to-do-better way. Your competition is not ready for what is about to walk in.
+    <br/><br/>
+    <strong>I am incredibly, ridiculously proud of you</strong> — not for the result (though that is going to be great too), but for the fact that you kept going when it was hard. That matters more than any trophy.
+  </p>
+
+  <!-- ★ SWAP: replace with an action shot, study photo, or your fave pic of her -->
+  <div class="hype-photo">
+    <span class="photo-placeholder">
+      ✦ An action shot, practice photo, or favourite pic of her here ✦<br/>
+      <small>Recommended: landscape, min 840×630px</small>
+    </span>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">My belief in you</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">#1</div>
+      <div class="stat-label">Your cheerleader</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Pride, always</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     ANTI-VANILLA
+════════════════════════════════════ -->
+<section id="antvanilla">
+  <div class="av-container">
+    <div class="av-header">
+      <p class="section-label">The Anti-Basic Guide</p>
+      <h2>Our love will never be vanilla.</h2>
+      <p>Click each one. Collect them all.</p>
+    </div>
+
+    <div class="av-list">
+
+      <div class="av-item" onclick="toggleAv(this)">
+        <span class="av-icon">🔥</span>
+        <div class="av-text">
+          <strong>We do not fade — we deepen.</strong>
+          <span>Every quiet phase just means there is more of us to come back to. Depth is not vanilla.</span>
+        </div>
+        <div class="av-check">✓</div>
+      </div>
+
+      <div class="av-item" onclick="toggleAv(this)">
+        <span class="av-icon">💫</span>
+        <div class="av-text">
+          <strong>Our story is still being written.</strong>
+          <span>The best chapters of us have not happened yet. We are not a finished thing. We are ongoing.</span>
+        </div>
+        <div class="av-check">✓</div>
+      </div>
+
+      <div class="av-item" onclick="toggleAv(this)">
+        <span class="av-icon">🌊</span>
+        <div class="av-text">
+          <strong>Surviving a busy season together is not basic — it is rare.</strong>
+          <span>Most things break under pressure. We are not most things.</span>
+        </div>
+        <div class="av-check">✓</div>
+      </div>
+
+      <div class="av-item" onclick="toggleAv(this)">
+        <span class="av-icon">✨</span>
+        <div class="av-text">
+          <strong>I will always choose to make things feel special.</strong>
+          <span>Like making a whole website at midnight just because I want you to feel loved. That is us. Not vanilla.</span>
+        </div>
+        <div class="av-check">✓</div>
+      </div>
+
+      <div class="av-item" onclick="toggleAv(this)">
+        <span class="av-icon">🎯</span>
+        <div class="av-text">
+          <strong>Our love does not die — it adjusts.</strong>
+          <span>Right now it looks like understanding, patience, and showing up quietly. That is love at full volume.</span>
+        </div>
+        <div class="av-check">✓</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     PHOTO MEMORIES GRID
+════════════════════════════════════ -->
+<section id="memories">
+  <div class="memories-label">
+    <p class="section-label">Us</p>
+    <h2>Some of my favourite moments with you.</h2>
+    <p>Swap in your photos — you know which ones.</p>
+  </div>
+
+  <div class="photo-grid">
+    <!-- ★ SWAP all src values with your actual photo URLs -->
+    <div class="photo-cell tall">
+      <span class="photo-placeholder">📸 Favourite photo together — tall format (2:3 ratio)</span>
+    </div>
+    <div class="photo-cell">
+      <span class="photo-placeholder">📸 Candid / happy moment</span>
+    </div>
+    <div class="photo-cell">
+      <span class="photo-placeholder">📸 Something silly</span>
+    </div>
+    <div class="photo-cell">
+      <span class="photo-placeholder">📸 A day out</span>
+    </div>
+    <div class="photo-cell">
+      <span class="photo-placeholder">📸 Your favourite of her smile</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     HUG SECTION
+════════════════════════════════════ -->
+<section id="hug-section">
+  <h2 class="hug-heading">Need a boost right now?</h2>
+  <p class="hug-sub">This button was made for you.</p>
+
+  <button class="hug-btn" id="hugBtn" onclick="sendHug()">
+    Send me a digital hug ✦
+  </button>
+
+  <p class="hug-message" id="hugMessage"></p>
+</section>
+
+<!-- ════════════════════════════════════
+     FINALE
+════════════════════════════════════ -->
+<section id="finale">
+  <p class="finale-eyebrow">Always, endlessly</p>
+  <h2 class="finale-headline">
+    I love you more than<br/><em>I will ever find the right words for.</em>
+  </h2>
+  <p class="finale-sig">
+    Written at midnight, with everything I've got —<br/>
+    <strong>from the person who is, without question, in your corner.</strong><br/><br/>
+    Always.<br/>
+    &mdash; <strong>[Yash]</strong>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+  /* ── AMBIENT PARTICLE CANVAS ── */
+  (function () {
+    const canvas = document.getElementById('stardust');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function rand(a, b) { return Math.random() * (b - a) + a; }
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = rand(0, W);
+        this.y = rand(0, H);
+        this.r = rand(0.4, 1.4);
+        this.dx = rand(-0.12, 0.12);
+        this.dy = rand(-0.18, -0.04);
+        this.alpha = rand(0.1, 0.55);
+        this.pulse = rand(0, Math.PI * 2);
+        this.pulseSpeed = rand(0.005, 0.018);
+        this.hue = Math.random() > 0.5 ? '176, 107, 255' : '249, 168, 212';
+      }
+      draw() {
+        this.pulse += this.pulseSpeed;
+        const a = this.alpha * (0.6 + 0.4 * Math.sin(this.pulse));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.hue}, ${a})`;
+        ctx.fill();
+        this.x += this.dx;
+        this.y += this.dy;
+        if (this.y < -4 || this.x < -4 || this.x > W + 4) this.reset();
+      }
+    }
+
+    for (let i = 0; i < 110; i++) particles.push(new Particle());
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => p.draw());
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ── SCROLL PROGRESS BAR ── */
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrolled / total) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+
+  /* ── SCROLL-IN LETTER CARDS ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.letter-card').forEach((c, i) => {
+    c.style.transitionDelay = (i * 0.12) + 's';
+    observer.observe(c);
+  });
+
+  /* ── REMINDER TABS ── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.reminder-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + idx).classList.add('active');
+    });
+  });
+
+  /* ── ANTI-VANILLA TOGGLE ── */
+  function toggleAv(el) {
+    el.classList.toggle('lit');
+  }
+
+  /* ── DIGITAL HUG ── */
+  const hugMessages = [
+    "You are so, so loved. Right now. Exactly as you are.",
+    "I am so proud of you. Every single day.",
+    "The fact that you keep going? That is everything to me.",
+    "You are never a burden. You are my favourite person.",
+    "Take a breath. I've got you. I'm not going anywhere.",
+    "This is your reminder: you are enough. Always have been.",
+    "Whatever today looks like — I am still wildly in love with you.",
+    "You are not too much, not too little. You are exactly right."
+  ];
+
+  let hugIdx = 0;
+  let hugLock = false;
+
+  function sendHug() {
+    if (hugLock) return;
+    hugLock = true;
+
+    const btn = document.getElementById('hugBtn');
+    const msg = document.getElementById('hugMessage');
+
+    btn.classList.add('pulsing');
+
+    // spawn hearts
+    for (let i = 0; i < 14; i++) {
+      setTimeout(() => spawnHeart(btn), i * 90);
+    }
+
+    // update message
+    msg.style.opacity = '0';
+    setTimeout(() => {
+      msg.textContent = hugMessages[hugIdx % hugMessages.length];
+      hugIdx++;
+      msg.style.opacity = '1';
+    }, 350);
+
+    setTimeout(() => {
+      btn.classList.remove('pulsing');
+      hugLock = false;
+    }, 2400);
+  }
+
+  function spawnHeart(origin) {
+    const rect = origin.getBoundingClientRect();
+    const heart = document.createElement('span');
+    heart.className = 'floating-heart';
+    const emojis = ['🩷','💜','✨','💗','🌸','💕','💫'];
+    heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const cx = rect.left + rect.width / 2;
+    const startX = cx + (Math.random() - 0.5) * 120;
+    heart.style.left = startX + 'px';
+    heart.style.top  = (rect.top + window.scrollY - 10) + 'px';
+    heart.style.fontSize = (1.1 + Math.random() * 0.9) + 'rem';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2300);
+  }
+</script>
+</body>
+</html>
+
